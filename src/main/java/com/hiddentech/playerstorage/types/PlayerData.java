@@ -33,7 +33,7 @@ public class PlayerData {
     this.strings = storedStrings;
     this.booleans = storedBooleans;
     this.ints = storedInts;
-    Bukkit.broadcastMessage("loaded from cloud");
+//    Bukkit.broadcastMessage("loaded from cloud");
     }
 
     public PlayerData(UUID uniqueId) {
@@ -41,6 +41,6 @@ public class PlayerData {
         this.booleans = new HashMap<>();
         this.ints = new HashMap<>();
         this.uuid = uniqueId;
-        Bukkit.broadcastMessage("loaded locally");
+//        Bukkit.broadcastMessage("loaded locally");
     }
 }

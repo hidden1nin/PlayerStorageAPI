@@ -1,6 +1,7 @@
 package com.hiddentech.playerstorage.listeners;
 
 import com.hiddentech.playerstorage.PlayerStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -16,7 +17,6 @@ public class PlayerQuitListener implements Listener {
 
     @EventHandler
     public void playerQuitEvent(PlayerQuitEvent event){
-        plugin.getRegistry().savePlayer(event.getPlayer());
         plugin.getRegistry().removePlayer(event.getPlayer());
     }
 }

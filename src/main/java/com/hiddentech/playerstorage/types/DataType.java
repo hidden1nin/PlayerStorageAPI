@@ -11,6 +11,7 @@ public enum DataType {
         public Map<String, ?> deSerialize(Map<String, String> strings) {
             Map<String, String> sortedStrings = new HashMap<>();
             for (String key : strings.keySet()) {
+                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
                 if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.STRING)) {
                     sortedStrings.put(key, strings.get(key));
                 }
@@ -23,6 +24,7 @@ public enum DataType {
         public Map<String, ?> deSerialize(Map<String, String> strings) {
             Map<String, Boolean> sortedBooleans = new HashMap<>();
             for (String key : strings.keySet()) {
+                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
                 if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.BOOLEAN)) {
                     sortedBooleans.put(key, Boolean.valueOf(strings.get(key)));
                 }
@@ -35,6 +37,7 @@ public enum DataType {
         public Map<String, ?> deSerialize(Map<String, String> strings) {
             Map<String, Integer> sortedIntegers = new HashMap<>();
             for (String key : strings.keySet()) {
+                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
                 if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.INTEGER)) {
                     sortedIntegers.put(key, Integer.valueOf(strings.get(key)));
                 }

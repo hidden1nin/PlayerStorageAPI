@@ -2,6 +2,7 @@ package com.hiddentech.playerstorage;
 
 import com.hiddentech.playerstorage.types.DataType;
 import com.hiddentech.playerstorage.types.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
@@ -71,6 +72,7 @@ public class PlayerRegistry {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                savePlayer(uuid);
             }
         }.runTaskAsynchronously(plugin);
 
@@ -91,7 +93,6 @@ public class PlayerRegistry {
                     encode(data.getBooleans(),strings);
                     encode(data.getInts(),strings);
                     encode(data.getStrings(),strings);
-
                     jedis.del(data.getUuid().toString());
                     if(!strings.isEmpty()){
                         jedis.hset(data.getUuid().toString(), strings);
