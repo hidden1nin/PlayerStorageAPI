@@ -1,10 +1,8 @@
 package com.hiddentech.playerstorage;
 
-import com.hiddentech.playerstorage.listeners.Jump;
 import com.hiddentech.playerstorage.listeners.PlayerJoinListener;
 import com.hiddentech.playerstorage.listeners.PlayerQuitListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -52,11 +50,6 @@ public final class PlayerStorage extends JavaPlugin {
                     getPlugin().getConfig().getString("Password"));
 //            Jedis jedis = new Jedis("redis-14639.c266.us-east-1-3.ec2.cloud.redislabs.com",14639,5000);
 //            jedis.auth("rbZX3oKRmEroQ7XOWRtUb25cCMRtM2Fr");
-            Jedis jedis2 = pool.getResource();
-            HashMap<String,String> map = new HashMap<>();
-            map.put("key","value");
-            map.put("hud","false");
-            jedis2.hset("key",map);
             try {
                 Jedis jedis = pool.getResource();
                 Bukkit.broadcastMessage("[PlayerStorage] Connected to redis");
