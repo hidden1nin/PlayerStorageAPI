@@ -14,13 +14,19 @@ public class LoginConfig {
             plugin.getDataFolder().mkdirs();
         }
         //add config for connection
-        if(!plugin.getConfig().isSet("Connection")){
-            plugin.getConfig().set("Connection", "change this!");
+        if(!plugin.getConfig().isSet("Redis_Connection")){
+            plugin.getConfig().set("Redis_Connection", "change this!");
             //redis-14639.c266.us-east-1-3.ec2.cloud.redislabs.com:14639
-            plugin.getConfig().set("Port", 12345);
-            plugin.getConfig().set("Password", "and this too!");
+            plugin.getConfig().set("Redis_Port", 12345);
+            plugin.getConfig().set("Redis_Password", "and this too!");
+            plugin.getConfig().set("Redis_Data_Expire_After", 86400);
             //rbZX3oKRmEroQ7XOWRtUb25cCMRtM2Fr
-            plugin.saveConfig();
         }
+        if(!plugin.getConfig().isSet("Storage_Configuration")){
+            plugin.getConfig().set("Storage_Configuration","both");
+            plugin.getConfig().set("Mongo_DB_Name","PlayerStorageAPI");
+            plugin.getConfig().set("Mongo_DB_ConnectionString","Change Me Too!");
+        }
+        plugin.saveConfig();
     }
 }

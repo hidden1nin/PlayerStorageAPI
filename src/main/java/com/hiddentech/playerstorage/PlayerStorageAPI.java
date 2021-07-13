@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import java.util.UUID;
 
 public class PlayerStorageAPI {
-
+    
     public static void registerValue(String key,Boolean defaultValue){
         PlayerStorage.getPlugin().getRegistry().getTypes().put(key, DataType.BOOLEAN);
         PlayerStorage.getPlugin().getRegistry().getDefaultBools().put(key,defaultValue);

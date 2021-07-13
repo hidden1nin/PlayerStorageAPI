@@ -1,5 +1,6 @@
 package com.hiddentech.playerstorage;
 
+import com.hiddentech.playerstorage.types.PlayerData;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
@@ -7,41 +8,42 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
-public class PlayerData extends Document {
+public class MongoPlayerData extends Document {
 
     private final Mongo mongo;
     private final String uuid;
     private final Document document = this;
-    public PlayerData(UUID uuid, Mongo mongo) {
-        this.mongo = mongo;
-        this.uuid = uuid.toString();
-        put("uuid", uuid.toString());
-        put("data", new ArrayList<String>());
-        put("ouch", "yesysh");
+    private final PlayerStorage plugin;
+    private final PlayerData data;
 
-        Bukkit.broadcastMessage("saving");
-        save();
+    public MongoPlayerData(UUID uuid, PlayerData data, Mongo mongo, PlayerStorage plugin) {
+        this(uuid.toString(),data,mongo,plugin);
     }
-    public PlayerData(String uuid, Mongo mongo) {
+    public MongoPlayerData(String uuid,PlayerData data, Mongo mongo,PlayerStorage plugin) {
         this.mongo = mongo;
         this.uuid = uuid;
-        put("uuid", uuid.toString());
-        put("data", new ArrayList<String>());
-        put("ouch", "yesysh");
-
-        Bukkit.broadcastMessage("saving");
-        save();
+        this.plugin = plugin;
+        put("uuid", uuid);
+        put("bools", data.getBooleans());
+        put("ints",data.getInts());
+        put("strings",data.getStrings());
+        this.data=data;
     }
 
     public void save() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                mongo.getCollection().replaceOne(Filters.eq("uuid", uuid.toString()), document, new ReplaceOptions().upsert(true));
-                Bukkit.broadcastMessage(" yes"+ document);
+                //delete if no data is unique
+                if(data.getBooleans().isEmpty()&&data.getInts().isEmpty()&&data.getStrings().isEmpty()){
+                    mongo.getCollection().deleteOne(Filters.eq("uuid", uuid));
+                    return;
+                }
+                mongo.getCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true));
             }
-        };
+        }.runTaskAsynchronously(plugin);
     }
 }

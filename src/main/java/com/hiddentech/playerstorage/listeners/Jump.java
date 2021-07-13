@@ -18,12 +18,14 @@ public class Jump implements Listener {
 
     @EventHandler
     public void PlayerJump(PlayerJumpEvent event){
+        //get values from redis
         Integer integer =PlayerStorageAPI.getInt(event.getPlayer().getUniqueId(), "jump-count");
         Boolean bool = PlayerStorageAPI.getBool(event.getPlayer().getUniqueId(), "jump");
+        //set new values to redis
         PlayerStorageAPI.set(event.getPlayer().getUniqueId(), "jump",!bool);
         PlayerStorageAPI.set(event.getPlayer().getUniqueId(), "jump-count",integer+1);
-//        event.getPlayer().sendMessage("jump "+PlayerStorageAPI.getBool(event.getPlayer().getUniqueId(),"jump"));
-
-//        event.getPlayer().sendMessage("jump "+PlayerStorageAPI.getInt(event.getPlayer().getUniqueId(),"jump-count"));
+        //send the player a message with the new values.
+       event.getPlayer().sendMessage("jump "+PlayerStorageAPI.getBool(event.getPlayer().getUniqueId(),"jump"));
+       event.getPlayer().sendMessage("jump "+PlayerStorageAPI.getInt(event.getPlayer().getUniqueId(),"jump-count"));
     }
 }

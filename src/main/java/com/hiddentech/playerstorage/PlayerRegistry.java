@@ -1,7 +1,10 @@
 package com.hiddentech.playerstorage;
 
+import com.hiddentech.playerstorage.events.PlayerDataLoadEvent;
 import com.hiddentech.playerstorage.types.DataType;
 import com.hiddentech.playerstorage.types.PlayerData;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +27,7 @@ public class PlayerRegistry {
     }
 
     private HashMap<UUID, PlayerData> players = new HashMap<>();
-    private HashMap<String, DataType> types= new HashMap<>();
+    private HashMap<String, DataType> types = new HashMap<>();
 
     public HashMap<String, Boolean> getDefaultBools() {
         return defaultBools;
@@ -38,66 +41,157 @@ public class PlayerRegistry {
         return defaultStrings;
     }
 
-    private HashMap<String, Boolean> defaultBools= new HashMap<>();
-    private HashMap<String, Integer> defaultInts= new HashMap<>();
-    private HashMap<String, String> defaultStrings= new HashMap<>();
+    private HashMap<String, Boolean> defaultBools = new HashMap<>();
+    private HashMap<String, Integer> defaultInts = new HashMap<>();
+    private HashMap<String, String> defaultStrings = new HashMap<>();
 
-    public PlayerRegistry(PlayerStorage plugin){
+    public PlayerRegistry(PlayerStorage plugin) {
         this.plugin = plugin;
     }
 
     public void loadPlayer(Player player) {
         loadPlayer(player.getUniqueId());
     }
+
     public void loadPlayer(UUID uuid) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                try{
-                    if(players.containsKey(uuid))return;
-                    Jedis jedis = plugin.getPool().getResource();
 
-                    if(!jedis.exists(uuid.toString())){
-                        players.put(uuid,new PlayerData(uuid));
-                        return;
+                if (plugin.redisEnabled && plugin.mongoEnabled) {
+                    try {
+                        if (players.containsKey(uuid)) return;
+                        Jedis jedis = plugin.getPool().getResource();
+
+                        if (!jedis.exists(uuid.toString())) {
+
+                            if (plugin.mongoEnabled) {
+                                PlayerData data = loadPlayerFromMongo(uuid);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
+                                    }}.runTask(plugin);
+                                players.put(uuid, data);
+                                savePlayer(uuid);
+                            } else {
+                                PlayerData data= new PlayerData(uuid);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
+                                    }}.runTask(plugin);
+                                players.put(uuid, data);
+                            }
+                            return;
+                        }
+
+                        JedisLoad(jedis, uuid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    Map<String,String> stored =jedis.hgetAll(uuid.toString());
-                    Map<String,String> storedStrings = (Map<String, String>) DataType.STRING.deSerialize(stored);
-                    Map<String,Boolean> storedBooleans = (Map<String, Boolean>) DataType.BOOLEAN.deSerialize(stored);
-                    Map<String,Integer> storedInts = (Map<String, Integer>) DataType.INTEGER.deSerialize(stored);
-                    players.put(uuid,new PlayerData(uuid,storedStrings,storedBooleans,storedInts));
-
-                    jedis.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    savePlayer(uuid);
+                    return;
                 }
-                savePlayer(uuid);
+
+                if (plugin.mongoEnabled) {
+                    PlayerData data = loadPlayerFromMongo(uuid);
+                    players.put(uuid, data);
+                    savePlayer(uuid);
+                    return;
+                }
+
+                if (plugin.redisEnabled) {
+                    try {
+                        if (players.containsKey(uuid)) return;
+                        Jedis jedis = plugin.getPool().getResource();
+
+                        if (!jedis.exists(uuid.toString())) {
+                            PlayerData data = new PlayerData(uuid);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
+                                }}.runTask(plugin);
+                            players.put(uuid, data);
+                            return;
+                        }
+                        JedisLoad(jedis, uuid);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    savePlayer(uuid);
+                }
+
             }
         }.runTaskAsynchronously(plugin);
 
     }
 
+    private void JedisLoad(Jedis jedis, UUID uuid) {
+        Map<String, String> stored = jedis.hgetAll(uuid.toString());
+        Map<String, String> storedStrings = (Map<String, String>) DataType.STRING.deSerialize(stored);
+        Map<String, Boolean> storedBooleans = (Map<String, Boolean>) DataType.BOOLEAN.deSerialize(stored);
+        Map<String, Integer> storedInts = (Map<String, Integer>) DataType.INTEGER.deSerialize(stored);
+        PlayerData data = new PlayerData(uuid, storedStrings, storedBooleans, storedInts);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
+            }}.runTask(plugin);
+        players.put(uuid, data);
+
+        jedis.close();
+    }
+
+    private PlayerData loadPlayerFromMongo(UUID uuid) {
+        Document document = plugin.getMongo().getCollection().find(Filters.eq("uuid", uuid.toString())).first();
+        if (document == null) return new PlayerData(uuid);
+        Map<String, String> storedStrings = (Map<String, String>) document.get("strings");
+        Map<String, Boolean> storedBooleans = (Map<String, Boolean>) document.get("bools");
+        Map<String, Integer> storedInts = (Map<String, Integer>) document.get("ints");
+        PlayerData data = new PlayerData(uuid, storedStrings, storedBooleans, storedInts);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
+            }}.runTask(plugin);
+        return data;
+    }
+
     public void savePlayer(Player player) {
         savePlayer(player.getUniqueId());
     }
+
     public void savePlayer(UUID uuid) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    if(!players.containsKey(uuid))return;
-                    Jedis jedis = plugin.getPool().getResource();
+                    if (!players.containsKey(uuid)) return;
                     PlayerData data = players.get(uuid);
-                    HashMap<String,String> strings = new HashMap<>();
-                    encode(data.getBooleans(),strings);
-                    encode(data.getInts(),strings);
-                    encode(data.getStrings(),strings);
-                    jedis.del(data.getUuid().toString());
-                    if(!strings.isEmpty()){
-                        jedis.hset(data.getUuid().toString(), strings);
+
+                    if (plugin.redisEnabled) {
+                        Jedis jedis = plugin.getPool().getResource();
+                        HashMap<String, String> strings = new HashMap<>();
+                        encode(data.getBooleans(), strings);
+                        encode(data.getInts(), strings);
+                        encode(data.getStrings(), strings);
+                        jedis.del(data.getUuid().toString());
+                        if (!strings.isEmpty()) {
+                            jedis.hset(data.getUuid().toString(), strings);
+                            //auto remove old data after 1 day
+                            if (plugin.mongoEnabled) {
+                                jedis.expire(data.getUuid().toString(), plugin.expireTime);
+                            }
+                        }
+
+                        jedis.close();
                     }
-                    jedis.close();
+                    if (plugin.mongoEnabled) {
+                        MongoPlayerData mongoPlayerData = new MongoPlayerData(uuid, data, plugin.getMongo(), plugin);
+                        mongoPlayerData.save();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -111,9 +205,9 @@ public class PlayerRegistry {
     }
 
 
-    public void encode(Map<String,?> data,HashMap<String,String> strings){
-        for(String key:data.keySet()){
-            strings.put(key,String.valueOf(data.get(key)));
+    public void encode(Map<String, ?> data, HashMap<String, String> strings) {
+        for (String key : data.keySet()) {
+            strings.put(key, String.valueOf(data.get(key)));
         }
     }
 }
