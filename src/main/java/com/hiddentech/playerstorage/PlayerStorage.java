@@ -54,7 +54,8 @@ public final class PlayerStorage extends JavaPlugin {
         new PlayerQuitListener(this);
         new PlayerDataLoadListener(this);
         new GetDataCommand(this);
-
+        int pluginId = 12037; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
         try {
             SSLContext ctx = SSLContext.getInstance("TLSv1.2");
             ctx.init(null, null, null);
