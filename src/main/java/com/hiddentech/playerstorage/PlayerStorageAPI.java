@@ -80,7 +80,7 @@ public class PlayerStorageAPI {
         });
 
     }
-    public PlayerStorageAPI getInstance(JavaPlugin plugin){
+    public static PlayerStorageAPI getInstance(JavaPlugin plugin){
         if(instance==null){
             instance = new PlayerStorageAPI(plugin);
         }
