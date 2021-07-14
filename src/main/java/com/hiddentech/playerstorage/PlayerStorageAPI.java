@@ -55,8 +55,9 @@ public class PlayerStorageAPI {
     }
 
     private final PlayerRegistry registry;
+    private static PlayerStorageAPI instance;
 
-    public PlayerStorageAPI(JavaPlugin plugin) {
+    private PlayerStorageAPI(JavaPlugin plugin) {
         this.plugin = plugin;
         this.registry = new PlayerRegistry(this);
         new PlayerJoinListener(this);
@@ -78,6 +79,12 @@ public class PlayerStorageAPI {
             enableMongo(mongoEnabled);
         });
 
+    }
+    public PlayerStorageAPI getInstance(JavaPlugin plugin){
+        if(instance==null){
+            instance = new PlayerStorageAPI(plugin);
+        }
+        return instance;
     }
 
     private void enableMongo(boolean mongoEnabled) {
