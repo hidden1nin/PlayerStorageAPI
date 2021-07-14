@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class PlayerRegistry {
 
-    private final PlayerStorage plugin;
+    private final PlayerStorageAPI plugin;
 
     public HashMap<UUID, PlayerData> getPlayers() {
         return players;
@@ -45,7 +45,7 @@ public class PlayerRegistry {
     private HashMap<String, Integer> defaultInts = new HashMap<>();
     private HashMap<String, String> defaultStrings = new HashMap<>();
 
-    public PlayerRegistry(PlayerStorage plugin) {
+    public PlayerRegistry(PlayerStorageAPI plugin) {
         this.plugin = plugin;
     }
 
@@ -70,17 +70,19 @@ public class PlayerRegistry {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
-                                    }}.runTask(plugin);
+                                        plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
+                                    }
+                                }.runTask(plugin.getPlugin());
                                 players.put(uuid, data);
                                 savePlayer(uuid);
                             } else {
-                                PlayerData data= new PlayerData(uuid);
+                                PlayerData data = new PlayerData(uuid);
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
-                                    }}.runTask(plugin);
+                                        plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
+                                    }
+                                }.runTask(plugin.getPlugin());
                                 players.put(uuid, data);
                             }
                             return;
@@ -111,8 +113,9 @@ public class PlayerRegistry {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
-                                }}.runTask(plugin);
+                                    plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
+                                }
+                            }.runTask(plugin.getPlugin());
                             players.put(uuid, data);
                             return;
                         }
@@ -124,21 +127,22 @@ public class PlayerRegistry {
                 }
 
             }
-        }.runTaskAsynchronously(plugin);
+        }.runTaskAsynchronously(plugin.getPlugin());
 
     }
 
     private void JedisLoad(Jedis jedis, UUID uuid) {
         Map<String, String> stored = jedis.hgetAll(uuid.toString());
-        Map<String, String> storedStrings = (Map<String, String>) DataType.STRING.deSerialize(stored);
-        Map<String, Boolean> storedBooleans = (Map<String, Boolean>) DataType.BOOLEAN.deSerialize(stored);
-        Map<String, Integer> storedInts = (Map<String, Integer>) DataType.INTEGER.deSerialize(stored);
+        Map<String, String> storedStrings = (Map<String, String>) DataType.STRING.deSerialize(stored, plugin);
+        Map<String, Boolean> storedBooleans = (Map<String, Boolean>) DataType.BOOLEAN.deSerialize(stored, plugin);
+        Map<String, Integer> storedInts = (Map<String, Integer>) DataType.INTEGER.deSerialize(stored, plugin);
         PlayerData data = new PlayerData(uuid, storedStrings, storedBooleans, storedInts);
         new BukkitRunnable() {
             @Override
             public void run() {
-                plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
-            }}.runTask(plugin);
+                plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
+            }
+        }.runTask(plugin.getPlugin());
         players.put(uuid, data);
 
         jedis.close();
@@ -154,8 +158,9 @@ public class PlayerRegistry {
         new BukkitRunnable() {
             @Override
             public void run() {
-                plugin.getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getServer().getPlayer(uuid), data));
-            }}.runTask(plugin);
+                plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
+            }
+        }.runTask(plugin.getPlugin());
         return data;
     }
 
@@ -196,7 +201,7 @@ public class PlayerRegistry {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        }.runTaskAsynchronously(plugin.getPlugin());
     }
 
 

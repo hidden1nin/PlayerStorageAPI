@@ -1,32 +1,47 @@
 package com.hiddentech.playerstorage;
 
-public class LoginConfig {
-    private final PlayerStorage plugin;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-    public LoginConfig(PlayerStorage plugin){
+import java.io.File;
+import java.io.IOException;
+
+public class LoginConfig {
+    private final PlayerStorageAPI plugin;
+
+    public LoginConfig(PlayerStorageAPI plugin){
         this.plugin = plugin;
         setConfig();
     }
 
     private void setConfig() {
         //make directory
-        if (!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdirs();
+
+        File file = new File(plugin.getPlugin().getDataFolder()+"/Database.yml");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
         //add config for connection
-        if(!plugin.getConfig().isSet("Redis_Connection")){
-            plugin.getConfig().set("Redis_Connection", "change this!");
-            //redis-14639.c266.us-east-1-3.ec2.cloud.redislabs.com:14639
-            plugin.getConfig().set("Redis_Port", 12345);
-            plugin.getConfig().set("Redis_Password", "and this too!");
-            plugin.getConfig().set("Redis_Data_Expire_After", 86400);
-            //rbZX3oKRmEroQ7XOWRtUb25cCMRtM2Fr
+        if(!yml.isSet("Redis_Connection")){
+            yml.set("Redis_Connection", "change this!");
+            yml.set("Redis_Port", 12345);
+            yml.set("Redis_Password", "and this too!");
+            yml.set("Redis_Data_Expire_After", 86400);
         }
-        if(!plugin.getConfig().isSet("Storage_Configuration")){
-            plugin.getConfig().set("Storage_Configuration","both");
-            plugin.getConfig().set("Mongo_DB_Name","PlayerStorageAPI");
-            plugin.getConfig().set("Mongo_DB_ConnectionString","Change Me Too!");
+        if(!yml.isSet("Storage_Configuration")){
+            yml.set("Storage_Configuration","both");
+            yml.set("Mongo_DB_Name","PlayerStorageAPI");
+            yml.set("Mongo_DB_ConnectionString","Change Me Too!");
         }
-        plugin.saveConfig();
+        try {
+            yml.options().copyDefaults(true);
+            yml.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,9 +1,0 @@
-name: PlayerStorage
-version: ${project.version}
-main: com.hiddentech.playerstorage.PlayerStorage
-api-version: 1.13
-authors: [ hidden1nin ]
-description: Manages simple values for players
-commands:
-  PlayerData:
-    description: gives all player data for a player.

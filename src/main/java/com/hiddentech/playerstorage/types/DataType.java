@@ -1,6 +1,6 @@
 package com.hiddentech.playerstorage.types;
 
-import com.hiddentech.playerstorage.PlayerStorage;
+import com.hiddentech.playerstorage.PlayerStorageAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,11 +8,11 @@ import java.util.Map;
 public enum DataType {
     STRING {
         @Override
-        public Map<String, ?> deSerialize(Map<String, String> strings) {
+        public Map<String, ?> deSerialize(Map<String, String> strings,PlayerStorageAPI plugin) {
             Map<String, String> sortedStrings = new HashMap<>();
             for (String key : strings.keySet()) {
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.STRING)) {
+                if (plugin.getRegistry().getTypes().get(key) == null)continue;
+                if (plugin.getRegistry().getTypes().get(key).equals(DataType.STRING)) {
                     sortedStrings.put(key, strings.get(key));
                 }
             }
@@ -21,11 +21,11 @@ public enum DataType {
     },
     BOOLEAN {
         @Override
-        public Map<String, ?> deSerialize(Map<String, String> strings) {
+        public Map<String, ?> deSerialize(Map<String, String> strings,PlayerStorageAPI plugin) {
             Map<String, Boolean> sortedBooleans = new HashMap<>();
             for (String key : strings.keySet()) {
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.BOOLEAN)) {
+                if (plugin.getRegistry().getTypes().get(key) == null)continue;
+                if (plugin.getRegistry().getTypes().get(key).equals(DataType.BOOLEAN)) {
                     sortedBooleans.put(key, Boolean.valueOf(strings.get(key)));
                 }
             }
@@ -34,11 +34,11 @@ public enum DataType {
     },
     INTEGER {
         @Override
-        public Map<String, ?> deSerialize(Map<String, String> strings) {
+        public Map<String, ?> deSerialize(Map<String, String> strings,PlayerStorageAPI plugin) {
             Map<String, Integer> sortedIntegers = new HashMap<>();
             for (String key : strings.keySet()) {
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key) == null)continue;
-                if (PlayerStorage.getPlugin().getRegistry().getTypes().get(key).equals(DataType.INTEGER)) {
+                if (plugin.getRegistry().getTypes().get(key) == null)continue;
+                if (plugin.getRegistry().getTypes().get(key).equals(DataType.INTEGER)) {
                     sortedIntegers.put(key, Integer.valueOf(strings.get(key)));
                 }
             }
@@ -47,5 +47,5 @@ public enum DataType {
     };
 
 
-    public abstract Map<String, ?> deSerialize(Map<String, String> strings);
+    public abstract Map<String, ?> deSerialize(Map<String, String> strings, PlayerStorageAPI plugin);
 }

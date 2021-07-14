@@ -4,11 +4,8 @@ import com.hiddentech.playerstorage.types.PlayerData;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.UUID;
 
 public class MongoPlayerData extends Document {
@@ -16,13 +13,13 @@ public class MongoPlayerData extends Document {
     private final Mongo mongo;
     private final String uuid;
     private final Document document = this;
-    private final PlayerStorage plugin;
+    private final PlayerStorageAPI plugin;
     private final PlayerData data;
 
-    public MongoPlayerData(UUID uuid, PlayerData data, Mongo mongo, PlayerStorage plugin) {
+    public MongoPlayerData(UUID uuid, PlayerData data, Mongo mongo, PlayerStorageAPI plugin) {
         this(uuid.toString(),data,mongo,plugin);
     }
-    public MongoPlayerData(String uuid,PlayerData data, Mongo mongo,PlayerStorage plugin) {
+    public MongoPlayerData(String uuid,PlayerData data, Mongo mongo,PlayerStorageAPI plugin) {
         this.mongo = mongo;
         this.uuid = uuid;
         this.plugin = plugin;
@@ -44,6 +41,6 @@ public class MongoPlayerData extends Document {
                 }
                 mongo.getCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true));
             }
-        }.runTaskAsynchronously(plugin);
+        }.runTaskAsynchronously(plugin.getPlugin());
     }
 }
