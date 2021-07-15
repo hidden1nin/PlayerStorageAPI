@@ -44,7 +44,11 @@ public final class Example extends JavaPlugin {
     }
     
     public void fooBarEvent(FooEvent event){
-        playerStorageAPI.set(event.getplayer().getUniqueId(),"foo",1);
+        //Retrieve a stored value
+        int value = playerStorageAPI.getInt(event.getplayer().getUniqueId(),"foo");
+        
+        //Update the stored value
+        playerStorageAPI.set(event.getplayer().getUniqueId(),"foo",value+1);
     }
     
 }
