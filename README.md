@@ -37,6 +37,7 @@ foobar.pluralize('goose')
 # returns 'phenomenon'
 foobar.singularize('phenomena')
 ```
+
 ##Contact
 Reach me on discord at Hidden1nin#9457
 
