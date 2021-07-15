@@ -1,5 +1,6 @@
 # PlayerStorageAPI
-Allows storing to redis and write-through to store data to mongodb
+Allows storing to Redis/MongoDB or both if you choose! 
+Our API quickly adds database support to your minecraft plugins.
 
 ## Installation
 
@@ -36,7 +37,8 @@ foobar.pluralize('goose')
 # returns 'phenomenon'
 foobar.singularize('phenomena')
 ```
-
+##Contact
+Reach me on discord at Hidden1nin#9457
 
 ## License
 [CC](https://creativecommons.org/)
