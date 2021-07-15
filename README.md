@@ -43,7 +43,8 @@ public final class Example extends JavaPlugin {
         playerStorageAPI.registerValue("test",true);
     }
     
-    public void fooBarEvent(FooEvent event){
+    //This event fires when a players data is loaded when they join
+    public void playerJoinEvent(PlayerDataLoad event){
         //Retrieve a stored value
         int value = playerStorageAPI.getInt(event.getplayer().getUniqueId(),"foo");
         
