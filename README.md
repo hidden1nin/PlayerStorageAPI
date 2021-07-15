@@ -28,10 +28,10 @@ Use the package manager [Maven](https://maven.apache.org/) to add PlayerStorageA
 ```java
 import com.hiddentech.playerstorage.PlayerStorageAPI;
 
-private PlayerStorageAPI playerStorageAPI;
-
 public final class Example extends JavaPlugin {
 
+    private PlayerStorageAPI playerStorageAPI;
+    
     @Override
     public void onEnable() {
         //Grab an instance of the PlayerStorageAPI
