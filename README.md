@@ -28,7 +28,27 @@ Use the package manager [Maven](https://maven.apache.org/) to add PlayerStorageA
 ```java
 import com.hiddentech.playerstorage.PlayerStorageAPI;
 
-//First you must register a value to be stored.
+private PlayerStorageAPI playerStorageAPI;
+
+
+public final class Example extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        //Grab an instance of the PlayerStorageAPI
+        this.playerStorageAPI = PlayerStorageAPI.getInstance(this);
+        
+        //Register values you would like to store
+        playerStorageAPI.registerValue("foo",0);
+        playerStorageAPI.registerValue("bar","string default value");
+        playerStorageAPI.registerValue("test",true);
+    }
+    
+    public void fooBarEvent(FooEvent event){
+        playerStorageAPI.set(event.getplayer().getUniqueId(),"foo",1);
+    }
+    
+}
+
 
 ```
 
