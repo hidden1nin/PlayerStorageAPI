@@ -68,15 +68,15 @@ Mongo_DB_ConnectionString: Change Me Too!
 ```
 You need to change the connections aswell as the passwords.
 If you only need Redis functionality change
-```
+```yml
 Storage_Configuration: both
 ```
 to
-```
+```yml
 Storage_Configuration: redis
 ```
 or to use MongoDB
-```
+```yml
 Storage_Configuration: mongo
 ```
 If you would like to use Redis for caching and MongoDB for deep storage leave it set to both, and change the Expire Time to how long you would like data to stay cached for (in seconds).
