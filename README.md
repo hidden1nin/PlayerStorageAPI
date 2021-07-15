@@ -55,6 +55,31 @@ public final class Example extends JavaPlugin {
 
 
 ```
+## Config
+Once your plugin has started it will create a second config file inside your plugins folder,
+```yml
+Redis_Connection: change this!
+Redis_Port: 12345
+Redis_Password: and this too!
+Redis_Data_Expire_After: 86400
+Storage_Configuration: both
+Mongo_DB_Name: PlayerStorageAPI
+Mongo_DB_ConnectionString: Change Me Too!
+```
+You need to change the connections aswell as the passwords.
+If you only need Redis functionality change
+```
+Storage_Configuration: both
+```
+to
+```
+Storage_Configuration: redis
+```
+or to use MongoDB
+```
+Storage_Configuration: mongo
+```
+If you would like to use Redis for caching and MongoDB for deep storage leave it set to both, and change the Expire Time to how long you would like data to stay cached for (in seconds).
 
 ## Contact
 Reach me on discord at Hidden1nin#9457
