@@ -38,7 +38,7 @@ foobar.pluralize('goose')
 foobar.singularize('phenomena')
 ```
 
-##Contact
+## Contact
 Reach me on discord at Hidden1nin#9457
 
 ## License
