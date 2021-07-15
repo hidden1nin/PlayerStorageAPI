@@ -1,6 +1,7 @@
 # PlayerStorageAPI
 Allows storing to Redis/MongoDB or both if you choose! 
 Our API quickly adds database support to your minecraft plugins.
+View our [Spigot Page](https://www.spigotmc.org/resources/player-storage-api-maven-version.94290/)
 
 ## Installation
 
