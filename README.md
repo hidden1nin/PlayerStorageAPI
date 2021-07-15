@@ -30,8 +30,8 @@ import com.hiddentech.playerstorage.PlayerStorageAPI;
 
 private PlayerStorageAPI playerStorageAPI;
 
-
 public final class Example extends JavaPlugin {
+
     @Override
     public void onEnable() {
         //Grab an instance of the PlayerStorageAPI
