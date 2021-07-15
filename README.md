@@ -5,8 +5,21 @@ Allows storing to redis and write-through to store data to mongodb
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
 
-```bash
-pip install foobar
+```xml
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.hidden1nin</groupId>
+            <artifactId>PlayerStorageAPI</artifactId>
+            <version>2.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 ```
 
 ## Usage
@@ -24,10 +37,6 @@ foobar.pluralize('goose')
 foobar.singularize('phenomena')
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[CC](https://creativecommons.org/)
