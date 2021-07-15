@@ -82,7 +82,7 @@ Storage_Configuration: mongo
 If you would like to use Redis for caching and MongoDB for deep storage leave it set to both, and change the Expire Time to how long you would like data to stay cached for (in seconds).
 
 ## Contact
-Reach me on discord at Hidden1nin#9457
+Reach me for support/questions on discord at Hidden1nin#9457
 
 ## License
 [CC](https://creativecommons.org/)
