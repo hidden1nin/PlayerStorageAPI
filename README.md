@@ -25,17 +25,11 @@ Use the package manager [Maven](https://maven.apache.org/) to add PlayerStorageA
 
 ## Usage
 
-```python
-import foobar
+```java
+import com.hiddentech.playerstorage.PlayerStorageAPI;
 
-# returns 'words'
-foobar.pluralize('word')
+//First you must register a value to be stored.
 
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
 ```
 
 ## Contact
