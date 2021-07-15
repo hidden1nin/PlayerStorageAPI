@@ -3,7 +3,7 @@ Allows storing to redis and write-through to store data to mongodb
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [Maven](https://maven.apache.org/) to add PlayerStorageAPI as a shaded dependency.
 
 ```xml
     <repositories>
