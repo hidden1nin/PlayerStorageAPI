@@ -1,7 +1,5 @@
 package com.hiddentech.playerstorage.types;
 
-import org.bukkit.Bukkit;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
