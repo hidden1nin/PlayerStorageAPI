@@ -11,9 +11,16 @@ public class PlayerDataChangeEvent extends Event {
     private final PlayerData data;
     private static final HandlerList handlers = new HandlerList();
 
-    public PlayerDataChangeEvent(Player player, PlayerData data){
+    public String getLocation() {
+        return location;
+    }
+
+    private final String location;
+
+    public PlayerDataChangeEvent(Player player, PlayerData data,String location){
         this.player = player;
         this.data = data;
+        this.location = location;
     }
 
     public PlayerData getPlayerData() {

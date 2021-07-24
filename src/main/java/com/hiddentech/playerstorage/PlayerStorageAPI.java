@@ -2,10 +2,9 @@ package com.hiddentech.playerstorage;
 
 
 import com.hiddentech.playerstorage.events.PlayerDataChangeEvent;
-import com.hiddentech.playerstorage.events.PlayerDataLoadEvent;
-import com.hiddentech.playerstorage.types.DataType;
 import com.hiddentech.playerstorage.listeners.PlayerJoinListener;
 import com.hiddentech.playerstorage.listeners.PlayerQuitListener;
+import com.hiddentech.playerstorage.types.DataType;
 import com.hiddentech.playerstorage.types.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -192,7 +191,7 @@ public class PlayerStorageAPI {
         }
         data.getBooleans().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data));
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 
@@ -208,7 +207,7 @@ public class PlayerStorageAPI {
         }
         data.getInts().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data));
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 
@@ -224,7 +223,7 @@ public class PlayerStorageAPI {
         }
         data.getStrings().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data));
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 }
