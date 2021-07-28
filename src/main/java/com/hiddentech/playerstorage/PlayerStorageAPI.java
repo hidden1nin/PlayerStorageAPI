@@ -182,6 +182,8 @@ public class PlayerStorageAPI {
     public void set(UUID uuid, String key, Boolean value) {
         if (!getRegistry().getDefaultBools().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
+
         PlayerData data = getRegistry().getPlayers().get(uuid);
         Boolean defaultValue = getRegistry().getDefaultBools().get(key);
         if (value.equals(defaultValue)) {
@@ -191,13 +193,14 @@ public class PlayerStorageAPI {
         }
         data.getBooleans().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 
     public void set(UUID uuid, String key, Integer value) {
         if (!getRegistry().getDefaultInts().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
+
         PlayerData data = getRegistry().getPlayers().get(uuid);
         Integer defaultValue = getRegistry().getDefaultInts().get(key);
         if (value.equals(defaultValue)) {
@@ -207,13 +210,14 @@ public class PlayerStorageAPI {
         }
         data.getInts().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 
     public void set(UUID uuid, String key, String value) {
         if (!getRegistry().getDefaultStrings().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
+
         PlayerData data = getRegistry().getPlayers().get(uuid);
         String defaultValue = getRegistry().getDefaultStrings().get(key);
         if (value.equals(defaultValue)) {
@@ -223,7 +227,6 @@ public class PlayerStorageAPI {
         }
         data.getStrings().put(key, value);
         getRegistry().savePlayer(uuid);
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
     }
 }
