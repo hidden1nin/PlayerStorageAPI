@@ -61,6 +61,7 @@ public class PlayerStorageAPI {
 
     private PlayerStorageAPI(JavaPlugin plugin) {
         this.plugin = plugin;
+        //unsure why this is not being found in my ide
         this.registry = new PlayerRegistry(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
