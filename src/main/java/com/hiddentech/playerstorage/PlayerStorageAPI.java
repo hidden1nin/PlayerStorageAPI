@@ -183,9 +183,9 @@ public class PlayerStorageAPI {
     public void set(UUID uuid, String key, Boolean value) {
         if (!getRegistry().getDefaultBools().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
+        PlayerData data = getRegistry().getPlayers().get(uuid);
         this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
-        PlayerData data = getRegistry().getPlayers().get(uuid);
         Boolean defaultValue = getRegistry().getDefaultBools().get(key);
         if (value.equals(defaultValue)) {
             data.getBooleans().remove(key);
@@ -200,9 +200,10 @@ public class PlayerStorageAPI {
     public void set(UUID uuid, String key, Integer value) {
         if (!getRegistry().getDefaultInts().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
         PlayerData data = getRegistry().getPlayers().get(uuid);
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
+
         Integer defaultValue = getRegistry().getDefaultInts().get(key);
         if (value.equals(defaultValue)) {
             data.getInts().remove(key);
@@ -217,9 +218,10 @@ public class PlayerStorageAPI {
     public void set(UUID uuid, String key, String value) {
         if (!getRegistry().getDefaultStrings().containsKey(key)) return;
         if (!getRegistry().getPlayers().containsKey(uuid)) return;
-        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
 
         PlayerData data = getRegistry().getPlayers().get(uuid);
+        this.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataChangeEvent(this.getPlugin().getServer().getPlayer(uuid), data,key));
+
         String defaultValue = getRegistry().getDefaultStrings().get(key);
         if (value.equals(defaultValue)) {
             data.getStrings().remove(key);
