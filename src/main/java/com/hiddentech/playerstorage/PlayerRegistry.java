@@ -149,6 +149,7 @@ public class PlayerRegistry {
     }
 
     private PlayerData loadPlayerFromMongo(UUID uuid) {
+        plugin.getMongo().connect();
         Document document = plugin.getMongo().getCollection().find(Filters.eq("uuid", uuid.toString())).first();
         if (document == null) return new PlayerData(uuid);
         Map<String, String> storedStrings = (Map<String, String>) document.get("strings");
@@ -194,6 +195,7 @@ public class PlayerRegistry {
                         jedis.close();
                     }
                     if (plugin.mongoEnabled) {
+                        plugin.getMongo().connect();
                         MongoPlayerData mongoPlayerData = new MongoPlayerData(uuid, data, plugin.getMongo(), plugin);
                         mongoPlayerData.save();
                     }
