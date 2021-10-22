@@ -3,6 +3,7 @@ package com.hiddentech.playerstorage;
 import com.hiddentech.playerstorage.events.PlayerDataLoadEvent;
 import com.hiddentech.playerstorage.types.DataType;
 import com.hiddentech.playerstorage.types.PlayerData;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -162,6 +163,7 @@ public class PlayerRegistry {
                 plugin.getPlugin().getServer().getPluginManager().callEvent(new PlayerDataLoadEvent(plugin.getPlugin().getServer().getPlayer(uuid), data));
             }
         }.runTask(plugin.getPlugin());
+        plugin.getMongo().getClient().close();
         return data;
     }
 
@@ -198,6 +200,7 @@ public class PlayerRegistry {
                         plugin.getMongo().connect();
                         MongoPlayerData mongoPlayerData = new MongoPlayerData(uuid, data, plugin.getMongo(), plugin);
                         mongoPlayerData.save();
+                        plugin.getMongo().getClient().close();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
