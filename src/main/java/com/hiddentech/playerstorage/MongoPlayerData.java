@@ -34,12 +34,12 @@ public class MongoPlayerData extends Document {
         new BukkitRunnable() {
             @Override
             public void run() {
+                mongo.connect();
                 //delete if no data is unique
                 if(data.getBooleans().isEmpty()&&data.getInts().isEmpty()&&data.getStrings().isEmpty()){
                     mongo.getCollection().deleteOne(Filters.eq("uuid", uuid));
                     return;
                 }
-                mongo.connect();
                 mongo.getCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true));
                 mongo.getClient().close();
             }
