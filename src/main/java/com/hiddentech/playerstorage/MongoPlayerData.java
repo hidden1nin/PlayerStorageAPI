@@ -39,7 +39,9 @@ public class MongoPlayerData extends Document {
                     mongo.getCollection().deleteOne(Filters.eq("uuid", uuid));
                     return;
                 }
+                mongo.connect();
                 mongo.getCollection().replaceOne(Filters.eq("uuid", uuid), document, new ReplaceOptions().upsert(true));
+                mongo.getClient().close();
             }
         }.runTaskAsynchronously(plugin.getPlugin());
     }
