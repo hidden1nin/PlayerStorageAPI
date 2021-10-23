@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PlayerStorageAPI {
 
@@ -60,8 +61,8 @@ public class PlayerStorageAPI {
     private static PlayerStorageAPI instance;
 
     private PlayerStorageAPI(JavaPlugin plugin) {
+        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         this.plugin = plugin;
-        //unsure why this is not being found in my ide
         this.registry = new PlayerRegistry(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
