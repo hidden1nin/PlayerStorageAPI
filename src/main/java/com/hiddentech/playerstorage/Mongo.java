@@ -1,10 +1,16 @@
 package com.hiddentech.playerstorage;
 
+import com.mongodb.Block;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.connection.ConnectionPoolSettings;
 import org.bson.Document;
+
+import java.io.IOException;
 
 public class Mongo {
     private final String connectionString;

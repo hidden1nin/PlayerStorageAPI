@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class PlayerStorageAPI {
@@ -61,7 +63,8 @@ public class PlayerStorageAPI {
     private static PlayerStorageAPI instance;
 
     private PlayerStorageAPI(JavaPlugin plugin) {
-        Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+        Logger logger = (Logger) LoggerFactory.getLogger("org.mongodb.driver.cluster");
+        logger.setLevel(Level.WARNING);
         this.plugin = plugin;
         this.registry = new PlayerRegistry(this);
         new PlayerJoinListener(this);
